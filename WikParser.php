@@ -6,10 +6,21 @@ use ybourque\Wikparser\lib\HyperParse;
 use ybourque\Wikparser\lib\PosParse;
 use ybourque\Wikparser\lib\SynParse;
 use ybourque\Wikparser\lib\WikiExtract;
+use ybourque\Wikparser\lib\Lang\En;
+
+
+
+	echo $conn->host_info . "<BR>";
+	
+$wik = new WikParser();
+$queries = ['def', 'pos', 'syn', 'hyper', 'gender'];
+$parsed = $wik->getWordDefiniton('simplement', $queries, 'en');
+var_dump($parsed);
+
 
 class WikParser{
     public $parsedDefinition='';
-
+       
     /***********************************************************************************/
     /***********************************************************************************/
     // Language code for search, default english (en)
@@ -20,7 +31,7 @@ class WikParser{
     /***********************************************************************************/
     /***********************************************************************************/
     public function getWordDefiniton($word,$query='def',$langCode='en',$count=100,$source='api'){
-        $this->word = $word;
+		$this->word = $word;
         $this->count = $count;
         $this->source = $source;
         $this->langParameters = $this->newLang($langCode);
@@ -38,7 +49,7 @@ class WikParser{
         $class = 'ybourque\Wikparser\lib\Lang\\' . ucfirst(strtolower($langCode));
         return new $class();
     }
-
+	
     private function parseQuery($query, $wikitext){
         $parsedDefinition = [];
         switch ($query) {

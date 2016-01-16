@@ -7,7 +7,12 @@ namespace ybourque\Wikparser\lib;
 // $langCode = string (2-letter language code)
 // $wikiSource = string (either 'api' or 'local' for local MySQL).
 /***********************************************************************************/
+$languageParams = Array();
+$languageParams['langCode']='en';
+$languageParams['langHeader']='===';
+$languageParams['langSeparator']='=';
 
+$wik = new WikiExtract($languageParams,'local');
 class WikiExtract {
 /***********************************************************************************/
 // Variables
@@ -22,9 +27,13 @@ class WikiExtract {
 /***********************************************************************************/
 	public function __construct($langParameters, $wikiSource) {
 		$this->wikiSource = $wikiSource;
-		$this->langCode = $langParameters['langCode'];
+		$this->langCode = 'en';//$langParameters['langCode'];
 		$this->langHeader = $langParameters['langHeader'];
 		$this->langSeparator = $langParameters['langSeparator'];
+		//$res = $this->getWikiText('rapport');
+		$res = $this->sqlFetchData('rapport');
+		$res = $this->getWikiTextFromWiktionary('rapport');
+		echo "<pre>". $res;
 	}
 
 /***********************************************************************************/
@@ -49,19 +58,23 @@ class WikiExtract {
 /***********************************************************************************/
 	private function getWikiTextFromWiktionary($word) {
 		$word = urlencode($word);
-
+	
 	// Must be supplied, otherwise IP will be banned
 		$userAgent = "Wikitionary Text Parser 0.3 (http://www.igrec.ca/projects)";
 	// Paramaters passed to the Wik API, including search word.
 		$params = '?action=parse&prop=wikitext&page='.$word.'&format=xml';
 
 		$ch = curl_init('https://'.$this->langCode.'.wiktionary.org/w/api.php'.$params);
+		
 		curl_setopt($ch, CURLOPT_USERAGENT, $userAgent);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch,CURLOPT_ENCODING , "gzip");
 
 		$wikiAPIResult = curl_exec($ch);
-		curl_close($ch);
+		echo $wikiAPIResult;
+		if(!curl_close($ch)){
+			echo "curl didn't close";
+		}
 
 		if (strpos($wikiAPIResult, "error code=\"missingtitle\"") !== false) {
 			die("ERROR: The Wiktionary API did not return a page for that word.");
@@ -76,6 +89,8 @@ class WikiExtract {
 	private function sqlFetchData($word) {
 
 		include 'conc.php';
+		echo $conn->host_info . "<BR>";
+	
 		$word = mysqli_real_escape_string($conn, $word);
 
 	// 3 tables are used page->revision->text
