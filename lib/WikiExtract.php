@@ -7,12 +7,7 @@ namespace ybourque\Wikparser\lib;
 // $langCode = string (2-letter language code)
 // $wikiSource = string (either 'api' or 'local' for local MySQL).
 /***********************************************************************************/
-$languageParams = Array();
-$languageParams['langCode']='en';
-$languageParams['langHeader']='===';
-$languageParams['langSeparator']='=';
 
-$wik = new WikiExtract($languageParams,'local');
 class WikiExtract {
 /***********************************************************************************/
 // Variables
@@ -64,16 +59,17 @@ class WikiExtract {
 	// Paramaters passed to the Wik API, including search word.
 		$params = '?action=parse&prop=wikitext&page='.$word.'&format=xml';
 
-		$ch = curl_init('https://'.$this->langCode.'.wiktionary.org/w/api.php'.$params);
+		$ch = curl_init('http://'.$this->langCode.'.wiktionary.org/w/api.php'.$params);
 		
 		curl_setopt($ch, CURLOPT_USERAGENT, $userAgent);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch,CURLOPT_ENCODING , "gzip");
 
 		$wikiAPIResult = curl_exec($ch);
+		
 		echo $wikiAPIResult;
-		if(!curl_close($ch)){
-			echo "curl didn't close";
+		if(curl_exec($ch)===false){//curl_close($ch)){
+			echo curl_error($ch) . "<BR>";
 		}
 
 		if (strpos($wikiAPIResult, "error code=\"missingtitle\"") !== false) {
@@ -86,10 +82,10 @@ class WikiExtract {
 /***********************************************************************************/
 // Retrieves raw data via a local MySQL copy of Wiktionary (defined in conc.php).
 /***********************************************************************************/
-	private function sqlFetchData($word) {
+	public function sqlFetchData($word) {
 
 		include 'conc.php';
-		echo $conn->host_info . "<BR>";
+		//echo $conn->host_info . "<BR>";
 	
 		$word = mysqli_real_escape_string($conn, $word);
 

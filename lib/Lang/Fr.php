@@ -1,5 +1,6 @@
 <?php
 namespace ybourque\Wikparser\lib\Lang;
+use ybourque\Wikparser\lib\Lang\AbstractLang;
 
 class Fr extends AbstractLang
 {

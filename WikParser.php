@@ -7,20 +7,23 @@ use ybourque\Wikparser\lib\PosParse;
 use ybourque\Wikparser\lib\SynParse;
 use ybourque\Wikparser\lib\WikiExtract;
 use ybourque\Wikparser\lib\Lang\En;
-
-
-
-	echo $conn->host_info . "<BR>";
+use ybourque\Wikparser\lib\Lang\Fr;
+/*
+include '.\lib\DefParse.php';
+include '.\lib\GenderParse.php';
+include '.\lib\HyperParse.php';
+include '.\lib\PosParse.php';
+include '.\lib\SynParse.php';
+	*/
 	
-$wik = new WikParser();
+//$wik = new WikParser();
 $queries = ['def', 'pos', 'syn', 'hyper', 'gender'];
-$parsed = $wik->getWordDefiniton('simplement', $queries, 'en');
-var_dump($parsed);
+//$parsed = $wik->getWordDefiniton('simplement', $queries, 'en');
+//var_dump($parsed);
 
 
 class WikParser{
     public $parsedDefinition='';
-       
     /***********************************************************************************/
     /***********************************************************************************/
     // Language code for search, default english (en)
@@ -30,7 +33,7 @@ class WikParser{
     // Set wikisource to local if not set. Values either 'local' or 'api'.
     /***********************************************************************************/
     /***********************************************************************************/
-    public function getWordDefiniton($word,$query='def',$langCode='en',$count=100,$source='api'){
+    public function getWordDefiniton($word,$query='def',$langCode='fr',$count=100,$source='api'){
 		$this->word = $word;
         $this->count = $count;
         $this->source = $source;
@@ -46,11 +49,13 @@ class WikParser{
 
     private function newLang($langCode)
     {
-        $class = 'ybourque\Wikparser\lib\Lang\\' . ucfirst(strtolower($langCode));
-        return new $class();
+		
+        $class = '.\lib\Lang\\' . ucfirst(strtolower($langCode)) . '.php';
+		include $class;
+        return new Fr();
     }
 	
-    private function parseQuery($query, $wikitext){
+    public function parseQuery($query, $wikitext){
         $parsedDefinition = [];
         switch ($query) {
             /***********************************************************************************/

@@ -16,8 +16,7 @@
 	}
 	else {
 		//$conn = mysql_connect("localhost","root","admin"); //(host, username, password)
-		echo $conn->host_info . "<BR>";
-		echo $conn->client_version;
+		//echo $conn->host_info . "<BR>";
 		//var_dump($conn);
 		
 	}
