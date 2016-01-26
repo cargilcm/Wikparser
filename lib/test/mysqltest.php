@@ -36,8 +36,6 @@
 	//echo $trimmed;
 	
 	$word = $trimmed;//'accueillir';
-	$word = utf8_decode($word);
-		
 	$time_start = microtime(true);
 	
 	$query = "SELECT t.old_text FROM text t ";
@@ -56,7 +54,7 @@
 		$text= $wikitext;
 	}
 	else {
-		die("No such word as $word found.");
+		die("No such word found.");
 	}
 
 	$genderPattern = "(\{\{([mf]|mf)\??\}\})"; // {{m}}
@@ -71,9 +69,11 @@
 	$time = $time_end - $time_start;
 	print_r("".$matchesTrad[1]);
 	//print_r("\n<BR>time to translate mysql:  <span style='position:absolute;left:220px;'>" . $time . " sec.</span><BR>");
+	
 	/*
 	$params = '?action=parse&prop=wikitext&page='.$trimmed.'&format=xml';
 	$langCode = 'fr';
+	
 	$ch = curl_init('http://'.$langCode.'.wiktionary.org/w/api.php'.$params);		
 	
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
