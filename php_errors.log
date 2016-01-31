@@ -1,0 +1,8 @@
+[28-Jan-2016 21:28:32 UTC] PHP Warning:  mysqli::mysqli(): (HY000/1045): Access denied for user 'root'@'localhost' (using password: YES) in /home/ubuntu/workspace/Wikparser/lib/conc.php on line 12
+[28-Jan-2016 21:28:32 UTC] PHP Stack trace:
+[28-Jan-2016 21:28:32 UTC] PHP   1. {main}() /home/ubuntu/workspace/Wikparser/lib/conc.php:0
+[28-Jan-2016 21:28:32 UTC] PHP   2. mysqli->mysqli(*uninitialized*, *uninitialized*, *uninitialized*, *uninitialized*) /home/ubuntu/workspace/Wikparser/lib/conc.php:12
+[28-Jan-2016 21:29:25 UTC] PHP Warning:  mysqli::mysqli(): (HY000/1049): Unknown database 'frwiktionary' in /home/ubuntu/workspace/Wikparser/lib/conc.php on line 12
+[28-Jan-2016 21:29:25 UTC] PHP Stack trace:
+[28-Jan-2016 21:29:25 UTC] PHP   1. {main}() /home/ubuntu/workspace/Wikparser/lib/conc.php:0
+[28-Jan-2016 21:29:25 UTC] PHP   2. mysqli->mysqli(*uninitialized*, *uninitialized*, *uninitialized*, *uninitialized*) /home/ubuntu/workspace/Wikparser/lib/conc.php:12

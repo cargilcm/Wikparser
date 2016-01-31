@@ -2,9 +2,9 @@
 /**
 **/
 	$dbHost = 'localhost'; // e.g. localhost
-	$dbUser = 'root';
-	$dbPass = 'admin';
-	$dbName = 'frwiktionary3';
+	$dbUser = 'cargilcm_1';
+	$dbPass = '';
+	$dbName = 'frwikt';
 	
 /***********************************************************************************/
 	$conn = new mysqli($dbHost, $dbUser, $dbPass, $dbName);

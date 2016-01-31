@@ -22,7 +22,7 @@
 	
 	function sql_query($word){
 		$params = '?q='.$word;
-		$ch = curl_init('http://localhost/ybourque/Wikparser/lib/browsertest/mysqltest.php'.$params);		
+		$ch = curl_init('https://frwiktionary-cargilcm-1.c9users.io/Wikparser/lib/browsertest/mysqltest.php'.$params);		
 		
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch, CURLOPT_HEADER, 0);
