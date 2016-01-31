@@ -1,0 +1,36 @@
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+<script>
+$(document).ready(function(){
+    $("p").click(function(){
+        $("p").html('im here');
+    });
+});
+function suggest(inputString){
+		$result = (inputString.split(' '));
+		$("p").html($result);
+		
+        if(inputString.length == 0) {
+            $('#suggestions').fadeOut();
+        } else {
+        $('#name').addClass('load');
+		
+        $.get("http://localhost/ybourque/Wikparser/lib/Lang/filter_multi_params.php", {queryString: ""+inputString+""}, function(data){
+                if(data.length >0) {
+                    $('#goeshere').html(data);
+                }
+			});
+		};
+	};
+function fill(thisValue) {
+            $('#name').val(thisValue);
+             setTimeout("$('#suggestions').fadeOut();", 600);
+    }
+</script>
+</head>
+
+<body>
+
+<script>$i=0</script>
+<textarea id="textarea" cols=20 rows=6 onkeyup="suggest(this.value)"></textarea>
+<p id="goeshere">this is cool text</p>

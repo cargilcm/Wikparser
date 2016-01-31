@@ -47,54 +47,64 @@
 	//echo utf8_decode('drôle'); // outputs drôle in html
 
 	//isset() determines if var is set and not null
-	if(isset($argv)){
-		$var = $argv[1];
-		if(count($argv)>2)
-			$i = count($argv);
-	}
 	// check for an empty string and display a message.
-	if(isset($_GET['q']))
-		$var = trim($_GET['q']); //trim whitespace from the stored variable
-
-	if(isset($var))
-		$trimmed = trim($var); //trim whitespace from the stored variable
+	$i=0;
+	/*
+	if(isset($_GET)){
+		$pieces = Array();
+		foreach($_GET as $key=>$value)
+			$pieces[$i++]=$value;
+		//print_r($pieces);
+	}
+	$j = count($_GET);
+	*/
+	if(isset($_GET)){
+		$var = $_GET;
+		foreach($var as $key=>$value)
+			$pieces = explode(" ",$value);
+		//print_r($pieces);
+	}
+	$i=0;
+	$j=count($pieces);
+	if(isset($pieces[$i]))
+		$trimmed = trim($pieces[0]); //trim whitespace from the stored variable
 	else
 		$trimmed = " ";
 	//echo $trimmed;
 	
 	$word = $trimmed;//'accueillir';
 	$word = utf8_decode($word);
-		
 			
 	$time_start = microtime(true);
 
-	$text = sqlquery($conn,$word);
+	/*$text = sqlquery($conn,$word);
 	if(isset($text) && count($text)>=1)
 		print_r("$word=".$text[1]."\t");
 	else
-		print_r("no such word translation |");
-	$j=2;
-	if(isset($i))
-		while($j<$i){
-			$word = $argv[$j];//'accueillir';
+		print_r("no such word translation |");*/ 
+	
+	while($i<$j){
+			$word = trim($pieces[$i++]);//'accueillir';
 			$word = utf8_decode($word);
 			$text = sqlquery($conn,$word);//$word);
 			if(isset($text) && count($text)>=1)
-				print_r("$word=".$text[1]."\t");
+				//print_r("$word=".$text[1]."\t");
+				print_r($text[1] . " ");
 			else
 				print_r(" ////");
-			$j++;
+			
 		}
 	$time_end = microtime(true);
 	$time = $time_end - $time_start;
 	
-	if(isset($i)){
+	if(isset($pieces)){
 		$i=$i-1;
 		//print_r("\n<BR>time to translate using mysql $i words:  <span style='position:absolute;left:220px;'>" . $time . " sec.</span><BR>");
-		print_r("\ntime to translate using mysql $i words:" . $time . " sec.");
+		//print_r("\ntime to translate using mysql $i words:" . $time . " sec.");
 		}
 	else
-		print_r("\ntime to translate using mysql 1 words:" . $time . " sec.");
+		print_r("");
+		//print_r("\ntime to translate using mysql 1 words:" . $time . " sec.");
 		
 	/*
 	$genderPattern = "(\{\{([mf]|mf)\??\}\})"; // {{m}}
