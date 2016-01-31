@@ -1,6 +1,5 @@
 <?php
-/**
-**/
+
 	include("../conc.php");
 /***********************************************************************************/
 
@@ -51,29 +50,5 @@
 	$time_end = microtime(true);
 	$time = $time_end - $time_start;
 	print_r("".$matchesTrad[1]);
-	//print_r("\n<BR>time to translate mysql:  <span style='position:absolute;left:220px;'>" . $time . " sec.</span><BR>");
-	
-	/*
-	$params = '?action=parse&prop=wikitext&page='.$trimmed.'&format=xml';
-	$langCode = 'fr';
-	
-	$ch = curl_init('http://'.$langCode.'.wiktionary.org/w/api.php'.$params);		
-	
-	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-	curl_setopt($ch, CURLOPT_HEADER, 0);
-	curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
-	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-	curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-  
-	$data = curl_exec($ch);
-	curl_close($ch);
-	
-	//$xml = file_get_contents("fr.wiktionary.org/w/api.php");
-	//echo "data= ". $data;
-	$trad = preg_match($tradPattern,$data,$matchesTrad);
-	$time_end = microtime(true);
-	$time = $time_end - $time_start;
-	//print_r("$trimmed=".$matchesTrad[1]);
-	//print_r("\n<BR>time to translate via curl:  <span style='position:absolute;left:220px;'>" . $time . " sec.</span><BR>");
-	*/
+
 	?>
