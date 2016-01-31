@@ -1,24 +1,7 @@
 <?php
 /**
 **/
-	$dbHost = 'localhost'; // e.g. localhost
-	$dbUser = 'cargilcm_1';
-	$dbPass = '';
-	$dbName = 'frwikt';
-	
-/***********************************************************************************/
-	$conn = new mysqli($dbHost, $dbUser, $dbPass, $dbName);
-	
-	if ($conn->connect_errno > 0) {
-		die("Unable to connect to database [".$conn->connect_error."].");
-	}
-	else {
-		//$conn = mysql_connect("localhost","root","admin"); //(host, username, password)
-		//echo $conn->host_info . "<BR>";
-		//var_dump($conn);
-		
-	}
-	mysqli_set_charset($conn, 'utf8');
+	include("../conc.php");
 /***********************************************************************************/
 
 	//isset() determines if var is set and not null
@@ -35,7 +18,7 @@
 		$trimmed = " ";
 	//echo $trimmed;
 	
-	$word = $trimmed;//'accueillir';
+	$word = $trimmed;//'accueillir"
 	$time_start = microtime(true);
 	
 	$query = "SELECT t.old_text FROM text t ";
