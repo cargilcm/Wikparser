@@ -17,7 +17,7 @@ function suggest(inputString){
 		
         $.get("http://localhost/ybourque/Wikparser/lib/Lang/filter_multi_params.php", {queryString: ""+inputString+""}, function(data){
                 if(data.length >0) {
-                    $('#goeshere').html(data);
+                    $('p').html(data);
                 }
 			});
 		};
@@ -32,5 +32,5 @@ function fill(thisValue) {
 <body>
 
 <script>$i=0</script>
-<textarea id="textarea" cols=20 rows=6 onkeyup="suggest(this.value)"></textarea>
-<p id="goeshere">this is cool text</p>
+<textarea style="background-color:yellow;" id="textarea" cols=20 rows=6 onkeyup="suggest(this.value)"></textarea>
+<p style="color:blue;" id="goeshere"></p>

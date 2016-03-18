@@ -8,6 +8,7 @@
 	
 /***********************************************************************************/
 	$conn = new mysqli($dbHost, $dbUser, $dbPass, $dbName);
+	$conn2 = new mysqli($dbHost, $dbUser, $dbPass, 'extr');
 	
 	if ($conn->connect_errno > 0) {
 		die("Unable to connect to database [".$conn->connect_error."].");
@@ -19,6 +20,7 @@
 		
 	}
 	mysqli_set_charset($conn, 'utf8');
+	mysqli_set_charset($conn2, 'utf8');
 /***********************************************************************************/
 
 	//isset() determines if var is set and not null
@@ -45,9 +47,11 @@
 	$query .= "JOIN page p ON r.rev_page = p.page_id ";
 	$query .= "WHERE p.page_title = '$word' AND p.page_namespace = 0";
 
+	
 	if (!$queryResult = $conn->query($query)) {
 		die("Error: Couldn't query word.");
 	}
+	
 	if ($queryResult->num_rows > 0) {
 		while ($row = $queryResult->fetch_assoc()){
 			$wikitext = $row['old_text'];
@@ -67,32 +71,50 @@
 	$pos = preg_match($posPattern,$text,$matchesPos);
 	$trad = preg_match($tradPattern,$text,$matchesTrad);
 	
-	$time_end = microtime(true);
-	$time = $time_end - $time_start;
 	print_r("".$matchesTrad[1]);
-	//print_r("\n<BR>time to translate mysql:  <span style='position:absolute;left:220px;'>" . $time . " sec.</span><BR>");
-	print_r("\ntime to translate mysql:  <span style='position:absolute;left:220px;'>" . $time . " sec.</span><BR>");
 	
-	/*
-	$params = '?action=parse&prop=wikitext&page='.$trimmed.'&format=xml';
-	$langCode = 'fr';
-	$ch = curl_init('http://'.$langCode.'.wiktionary.org/w/api.php'.$params);		
+	//$query = "SELECT count(*) from page;";// p where p.page_namespace=0;";
+
 	
-	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-	curl_setopt($ch, CURLOPT_HEADER, 0);
-	curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
-	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-	curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-  
-	$data = curl_exec($ch);
-	curl_close($ch);
+	if (!$queryResult = $conn->query($query)) {
+		die("Error: Couldn't query word.");
+	}
+	$i=50;// $queryResult->fetch_assoc()['count(*)'];
+	$j=0;
+	echo "\n" . $i . "\n";
 	
-	//$xml = file_get_contents("fr.wiktionary.org/w/api.php");
-	//echo "data= ". $data;
-	$trad = preg_match($tradPattern,$data,$matchesTrad);
-	$time_end = microtime(true);
-	$time = $time_end - $time_start;
-	//print_r("$trimmed=".$matchesTrad[1]);
-	//print_r("\n<BR>time to translate via curl:  <span style='position:absolute;left:220px;'>" . $time . " sec.</span><BR>");
-	*/
+	$query = "SELECT t.old_text, p.page_title,p.pagenamespace from page p ";// p where p.page_namespace=0;";
+	$query .= "JOIN text t ON t.old_id=p.page_id ";
+	$query .= "JOIN revision r ON r.rev_text_id = t.old_id ";
+	//$query .= "JOIN page p ON r.rev_page = p.page_id ";
+	$query .= "WHERE p.page_title = '$word' AND p.page_namespace = 0 LIMIT 50";
+	
+	if (!$queryResult = $conn->query($query)) {
+		echo $query;
+		die("\nError: Couldn't query word.");
+	}
+		
+	if ($i > 0) {
+		while ($row = $queryResult->fetch_assoc() && $j<50){
+			//$tradPattern = "(trad\+\|en\|([A-z]*))";//(\{\{([trad+|en|])\??\}\})"; //   {{trad+|en|Tuesday}}  
+			//$trad = preg_match($tradPattern,$text,$matchesTrad);
+	
+			$query = "INSERT INTO extraction values ('null','"; /**null=ID_..ie will autoincrement */
+			$query .= $matchesTrad[1] ."','";
+			$query .= $row['rev_text_id'] ."', '";
+			$query .= $row['rev_page'] ."', '";
+			$query .= $row['page_namespace']  ."', '";
+			$query .= $row['page_title'] ."')";
+			$j++;
+		}
+	}
+	else echo 'didnt find any query result';
+	
+	if (!$queryResult2 = $conn2->query($query)) {
+		//echo $query;
+		die("\nError: Couldn't insert.");
+		
+	}
+	else echo $query;
+	
 	?>

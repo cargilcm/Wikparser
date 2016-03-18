@@ -41,7 +41,7 @@
 			die("No such word as $word found.");
 		}
 		$tradPattern = "(trad\+\|en\|([A-z]*))";  //(\{\{([trad+|en|])\??\}\})"; 
-		$trad = preg_match($tradPattern,$text,$matchesTrad);
+		$trad = preg_match_all($tradPattern,$text,$matchesTrad);
 		return $matchesTrad;
 	}
 	//echo utf8_decode('drôle'); // outputs drôle in html
@@ -86,10 +86,11 @@
 	while($i<$j){
 			$word = trim($pieces[$i++]);//'accueillir';
 			$word = utf8_decode($word);
+			//print_r($word);
 			$text = sqlquery($conn,$word);//$word);
-			if(isset($text) && count($text)>=1)
-				//print_r("$word=".$text[1]."\t");
-				print_r($text[1] . " ");
+			if(isset($text) && count($text)>=2)
+				print_r("$word=".$text[1][0]." \t"); //change this to arrive at synsets
+				//print_r($text[1] . " ");
 			else
 				print_r(" ////");
 			

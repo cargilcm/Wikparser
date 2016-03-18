@@ -47,7 +47,10 @@
 		curl_close($ch);
 		return $data;
 	}
+	
+	
 	echo "<Table border=1><TR><td>";
+	
 	echo $trimmed ."="; // trimmed = STDIN or query parameter
 	$time_start = microtime(true);		
 	echo sql_query($trimmed) . "</td>";
@@ -59,7 +62,7 @@
 	
 		
 
-	
+	$time_start = microtime(true);		
 	$data=curlWebApi($trimmed);
 	$genderPattern = "(\{\{([mf]|mf)\??\}\})"; // {{m}}
 	$posPattern = "(\{\{\S\|[\d\w\s]+\|fr(\|num=[0-9])?\}\})";  // {{S|nom|fr}}
