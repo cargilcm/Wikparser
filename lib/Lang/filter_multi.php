@@ -1,25 +1,7 @@
 <?php
 /**
 **/
-	$dbHost = 'localhost'; // e.g. localhost
-	$dbUser = 'root';
-	$dbPass = 'admin';
-	$dbName = 'frwiktionary3';
-	
-	
-/***********************************************************************************/
-	$conn = new mysqli($dbHost, $dbUser, $dbPass, $dbName);
-	
-	if ($conn->connect_errno > 0) {
-		die("Unable to connect to database [".$conn->connect_error."].");
-	}
-	else {
-		//$conn = mysql_connect("localhost","root","admin"); //(host, username, password)
-		//echo $conn->host_info . "<BR>";
-		//var_dump($conn);
-		
-	}
-	mysqli_set_charset($conn, 'utf8');
+	include("../conc.php");
 /***********************************************************************************/
 
 	function sqlquery($conn,$word){
