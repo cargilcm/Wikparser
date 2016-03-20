@@ -4,9 +4,9 @@
 // SQL copy of Wiktionary.
 /***********************************************************************************/
 	$dbHost = 'localhost'; // e.g. localhost
-	$dbUser = 'cargilcm_1';
-	$dbPass = '';
-	$dbName = 'frwikt';
+	$dbUser = 'root';
+	$dbPass = 'admin';
+	$dbName = 'frwiktionary3';
 	
 /***********************************************************************************/
 	$conn = new mysqli($dbHost, $dbUser, $dbPass, $dbName);

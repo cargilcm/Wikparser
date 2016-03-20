@@ -41,12 +41,7 @@
 		
 		$query = "SELECT * from page where page_id>=$min_id AND page_id<=$max AND page_namespace=0";// like \"absc%\"";
 		$min_id+=$offset;
-		/*
-		$query = "SELECT t.old_text FROM text t ";
-		$query .= "JOIN revision r ON r.rev_text_id = t.old_id ";
-		$query .= "JOIN page p ON r.rev_page = p.page_id ";
-		$query .= "WHERE p.page_title = '$word' AND p.page_namespace = 0"; */
-
+		
 		if (!$queryResult = $conn->query($query)) {
 			die("Error: Couldn't query word.");
 		}
@@ -56,7 +51,7 @@
 			while ($row = $queryResult->fetch_assoc()){
 				$page_title = $row['page_title'];//$row['old_text'];
 				$wikid = $row['page_id'];
-				$tablename = 'page';
+				$tablename = 'page2';
 				/***************/
 				$query = "SELECT * FROM  `revision` WHERE  `rev_id` = ".$row['page_latest']." limit 1";
 				$row_revision = query($conn,$query);
@@ -66,9 +61,8 @@
 				$row_text = query($conn,$query);
 				$old_text = $row_text['old_text'];
 				$entry[$i++] = [$wikid,$page_title,$old_text];
-				
+				$old_text='';
 			}
-			$text= $old_text;
 		}
 		else {
 			echo "No such query as $query possible.\n";
@@ -76,9 +70,7 @@
 		}
 		if(!$bad_query){
 			$ct= count($entry);
-			//echo $ct . "\n";// . " " . $entry[$c-1][1] . "\n";
 			$i=0;
-			//for($i=0;$i<$c;$i++){
 			while($i<=$ct){
 				//echo $i . "\n".$c;
 				if(!empty($entry[$i])){
@@ -86,28 +78,62 @@
 					$b = $entry[$i][1]; // page_title
 					$c = $entry[$i][2]; // old_text
 					
-					$tradPattern = "(trad\+\|en\|([A-z]*))";//(\{\{([trad+|en|])\??\}\})"; //   {{trad+|en|Tuesday}}  
-					preg_match($tradPattern,$c,$matchesTrad);
+					$t4 = "(trad\+\|en\|([A-z]* [A-z]* [A-z]* [A-z]*))";//(\{\{([trad+|en|])\??\}\})"; //   {{trad+|en|Tuesday Wedn Thurs Fri}}  
+					$t3 = "(trad\+\|en\|([A-z]* [A-z]* [A-z]*))";//(\{\{([trad+|en|])\??\}\})"; //   {{trad+|en|Tuesday Wedn Thurs}}  
+					$t2 = "(trad\+\|en\|([A-z]* [A-z]*))";//(\{\{([trad+|en|])\??\}\})"; //   {{trad+|en|Tuesday Wedn}}  
+					$t1 = "(trad\+\|en\|([A-z]*))";//(\{\{([trad+|en|])\??\}\})"; //   {{trad+|en|Tuesday}}  
 					
-					if(!empty($matchesTrad[1]))
-						$replacement = $matchesTrad[1];
+					$m4 = preg_match($t4,$c,$matchesTrad4);
+					$m3 = preg_match($t3,$c,$matchesTrad3);
+					$m2 = preg_match($t2,$c,$matchesTrad2);
+					$m1 = preg_match($t1,$c,$matchesTrad1);
+					$selection=5;
 					
-					
+					if($m4)
+						$selection = 4;
+					if(!empty($matchesTrad3)&& !$m4)
+						$selection = 3;
+					if(!empty($matchesTrad2)&& !$selection<5)
+						$selection = 2;
+					//if(!empty($matchesTrad1)&& !$selection<5)
+					if($m1 && !$selection<5)
+						$selection = 1;
+					//if(count($matchesTrad)>=2)
+						//	$matchesTrad = array_shift($matchesTrad);
+					$var_name = "$" . "matchesTrad".$selection; // = '$matchesTrad#1-4'
+					if($selection!==5)
+						if($selection!==1)
+							$replacement = implode(",", $var_name); // $matchesTrad[1]; // = translation #1
+						else
+							$replacement = $matchesTrad1[1];
+					//echo $b . "=" . $replacement . "\n";
+				
 					if(empty($replacement))
-						$c = $entry[$i][1];
+						$c = '';//$entry[$i][1];
 					else
 						$c = $replacement;	
-					//echo $c . "\n";
 					$query2 = "INSERT INTO $tablename(page_id,page_title,replacement) VALUES ";
 					$query2.= "('$a','$b','$c')";
 					$conn2->query($query2);
-					//echo $query2 . "\n";
+		//			echo $query2 . "\n";
+					$a='';
+					$b='';
+					$c='';
+					$replacement = '';
 				}
 				$i++;
 			}
-			echo "last word processed is $b\n";
+			echo "last word processed is $page_title\n";
 		}
-		$entry=[];
+		if(!empty($entry)){
+			if(count($entry[$ct-1])>0)
+				$last = implode(",",$entry[$ct-1]);
+			else
+				$last = $entry[$ct-1][1];
+			echo $ct . ":" . "$page_title" . ",$replacement\n";
+		}
+		$entry=NULL;
+		$ct=0;
 		$bad_query=FALSE;
 	/*	$genderPattern = "(\{\{([mf]|mf)\??\}\})"; // {{m}}
 		$posPattern = "(\{\{\S\|[\d\w\s]+\|fr(\|num=[0-9])?\}\})";  // {{S|nom|fr}}

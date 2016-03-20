@@ -49,6 +49,6 @@
 	
 	$time_end = microtime(true);
 	$time = $time_end - $time_start;
-	print_r("".$matchesTrad[1]);
-
+	//print_r("time to translate $word to ".$matchesTrad[1] . "\n$time ms");
+	print_r($matchesTrad[1]);
 	?>
