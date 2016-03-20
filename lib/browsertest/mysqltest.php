@@ -14,10 +14,11 @@
 	if(isset($var))
 		$trimmed = trim($var); //trim whitespace from the stored variable
 	else
-		$trimmed = " ";
+		$trimmed = "";
 	//echo $trimmed;
 	
 	$word = $trimmed;//'accueillir"
+	$word = utf8_encode($word);
 	$time_start = microtime(true);
 	
 	$query = "SELECT t.old_text FROM text t ";
@@ -36,7 +37,7 @@
 		$text= $wikitext;
 	}
 	else {
-		die("No such word found.");
+		die("No such word as $word found.");
 	}
 
 	$genderPattern = "(\{\{([mf]|mf)\??\}\})"; // {{m}}

@@ -24,26 +24,25 @@
 		}
 		
 		$tradPattern = "(trad\+\|en\|([A-z]* [A-z]* [A-z]*))";  //(\{\{([trad+|en|])\??\}\})"; 
-		$trad3 = preg_match_all($tradPattern,$text,$matchesTrad);
+		$trad3 = preg_match_all($tradPattern,$text,$matchesTrad3);
 		if($trad3)
-			return $matchesTrad;
-			
+			return $matchesTrad3;
 		$tradPattern = "(trad\+\|en\|([A-z]* [A-z]*))";  //(\{\{([trad+|en|])\??\}\})"; 
-		$trad2 = preg_match_all($tradPattern,$text,$matchesTrad);
+		$trad2 = preg_match_all($tradPattern,$text,$matchesTrad2);
 		if($trad2)
-			return $matchesTrad;
+			return $matchesTrad2;
 		$tradPattern = "(trad\+\|en\|([A-z]*))";  //(\{\{([trad+|en|])\??\}\})"; 
 		$trad = preg_match_all($tradPattern,$text,$matchesTrad);
 		if($trad)
 			return $matchesTrad;
-		return [];
+		return ["/////"];
 	}
 	//echo utf8_decode('drôle'); // outputs drôle in html
 
 	//isset() determines if var is set and not null
 	// check for an empty string and display a message.
 	$i=0;
-	/*
+	
 	if(isset($_GET)){
 		$pieces = Array();
 		foreach($_GET as $key=>$value)
@@ -51,13 +50,13 @@
 		//print_r($pieces);
 	}
 	$j = count($_GET);
-	*/
+	/*
 	if(isset($_GET)){
 		$var = $_GET;
 		foreach($var as $key=>$value)
 			$pieces = explode(" ",$value);
 		//print_r($pieces);
-	}
+	}*/
 	$i=0;
 	$j=count($pieces);
 	if(isset($pieces[$i]))
@@ -109,27 +108,6 @@
 	
 	$gen = preg_match($genderPattern,$text,$matchesGen);
 	$pos = preg_match($posPattern,$text,$matchesPos);
-	
-	
-	$params = '?action=parse&prop=wikitext&page='.$trimmed.'&format=xml';
-	$langCode = 'fr';
-	$ch = curl_init('http://'.$langCode.'.wiktionary.org/w/api.php'.$params);		
-	
-	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-	curl_setopt($ch, CURLOPT_HEADER, 0);
-	curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
-	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-	curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-  
-	$data = curl_exec($ch);
-	curl_close($ch);
-	
-	//$xml = file_get_contents("fr.wiktionary.org/w/api.php");
-	//echo "data= ". $data;
-	$trad = preg_match($tradPattern,$data,$matchesTrad);
-	$time_end = microtime(true);
-	$time = $time_end - $time_start;
-	//print_r("$trimmed=".$matchesTrad[1]);
-	//print_r("\n<BR>time to translate via curl:  <span style='position:absolute;left:220px;'>" . $time . " sec.</span><BR>");
 	*/
+
 	?>

@@ -29,6 +29,10 @@
 		return $results_page->fetch_assoc();
 	}
 /***********************************************************************************/
+	$query = "set names utf8";
+	query($conn,$query);
+	query($conn2,$query);
+	
 	$query = "Select max(page_id) from page";
 	$res = query($conn,$query);
 	$max_id=$res['max(page_id)'];

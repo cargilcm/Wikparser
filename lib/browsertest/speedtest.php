@@ -12,9 +12,9 @@
 	if(isset($var))
 		$trimmed = trim($var); //trim whitespace from the stored variable
 	else
-		$trimmed = " ";
+		$trimmed = "";
 	$trimmed = lowercase($trimmed);//'accueillir';
-	
+	$trimmed = utf8_decode($trimmed);
 
 	function lowercase($word){
 		return strtolower($word);
