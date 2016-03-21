@@ -81,10 +81,19 @@
 			$word = utf8_decode($word);
 			//print_r($word);
 			$text = sqlquery($conn,$word);//$word);
-			if(isset($text) && count($text)>=2)
-				 if(count($text[1])>=1)
-					print_r("".$text[1][0]." \t"); //change this to arrive at synsets
+			if(isset($text) && count($text)>=2){
+				 echo $word . "=";
+				 if(count($text[1])>=1){
+					$text[1] = array_unique($text[1]);
+					for($ii=0;$ii<=count($text[1]);$ii++){	
+						if(!empty($text[1][$ii]))
+							print_r("".$text[1][$ii]." &nbsp;, &nbsp;"); //change this to arrive at synsets
+					
+					}
+				}
+				echo "<br>";
 				//print_r($text[1] . " ");
+			}
 			else
 				print_r(" ////");
 			
